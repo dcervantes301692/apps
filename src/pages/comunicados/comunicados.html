@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-navbar color = "blen">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title align = "center" >Comunicados</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+
+<ion-content>
+  <ion-list name = "con" *ngFor="let com of comunicados">
+      <ion-item-sliding>
+        <ion-item>
+          <button ion-button clear class="btncominity" (click) = "detalle(com.id)">
+            <p>{{com.linea}}</p>
+          </button>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color = "blen" (click) = "no(com.id)">
+            <ion-icon name="md-eye-off"></ion-icon>
+            NO LEÍDO
+          </button>
+          <button ion-button color="danger" (click) ="borrado(com.id)">
+            <ion-icon name="md-close"></ion-icon>
+            BORRAR
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+</ion-content>

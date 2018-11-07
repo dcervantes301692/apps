@@ -1,0 +1,149 @@
+page-pedido {
+    .encabezado{
+        width: 100%;
+        border: 1 solid black;
+    }
+    .encabezado label{
+        font-size: 150%;
+        color: #009999;
+        font-weight:bold;
+    }
+    .icono{
+        font-size: 25px;
+        color: #009999;
+    }
+    table{
+        width: 100%;
+    }
+    .imgPedido{
+        width: 16%;
+    }
+    .imgPedido img{
+        align-content: center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat
+    }
+    .codPedido{
+        width: 15%;
+        color: #CCCCCC;
+    }
+    .cantidadPedido{
+        width: 20%;
+        text-align: center;
+    }
+    .botonespedido{
+        width: 10%;
+        text-align: center;
+        font-size: 17px;
+    }
+    .numCantidadPedido{
+        width: 8%;
+        text-align: center;
+    }
+    .moneda{
+        width: 5%;
+        font-style: italic;
+        color: #009999;
+        font-weight:bold;
+        text-align: center;
+    }
+    .linea{
+        font-style: italic;
+        color: #009999;
+        font-size: 95%;
+    }
+    .nombre{
+        font-weight:bold;
+    }
+    .precio{
+        font-weight:bold;
+        text-align: right;
+    }
+    ion-footer{
+        height: 150px;
+        background: white;
+    }
+    .TituloTicket{
+        font-size: 125%;
+        color: #009999;
+        font-weight:bold;
+    }
+    .SubtiruloTicket{
+        font-style: italic;
+        font-size: 90%;
+    }
+    .SubtiruloTicketCosto{
+        text-align: right;
+        font-style: italic;
+        font-size: 90%;
+    }
+    .TituloCosto{
+        font-size: 125%;
+        font-weight:bold;
+        text-align: right;
+    }
+    .SimboloTicket{
+        color: #009999;
+        font-weight:bold;
+        text-align: right;
+    }
+    input{
+        width: 100%;
+        text-align: center;
+        font-size: 110%;
+    }
+    .tablaBusqueda{
+        display: none;
+    }
+    .codigoBusqueda{
+        text-align: center;
+    }
+    #habil{
+        background: #009999;
+        color: white;
+        font-size: x-large;
+    }
+    #inhabil{
+        display: none;
+        background: #CCCCCC;
+        color: black;
+        font-size: x-large;
+    }
+    ion-item{
+        padding: 0%;
+        margin: 0%;
+        border: 0%;
+        text-align: center;
+        align-content: center;
+    }
+    .cancelarPedidoBusqueda{
+        background: #CCCCCC;
+        color: black;
+    }
+    .btnBuscador{
+        background: #009999;
+        color: white;
+    }
+    .codkit{
+        width: 15%;
+        text-align: center;
+    }
+    .BTNbusqueda{
+        color: white;
+        background: #009999;
+    }
+    .inputBusqueda{
+        font-size: 155%;
+    }
+    .btnBuscadorCancelar{
+        color: black;
+        background: #CCCCCC;
+    }
+    #kit{
+        background: #CCFFFF;
+    }
+    .customClass{
+        color:#e74c3c !important;
+    }
+}

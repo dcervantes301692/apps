@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar color="blue">
+    <table class="encabezado">
+      <tr>
+        <td width="20px" align="left">
+          <button ion-button menuToggle clear>
+            <ion-icon name="menu" class="icono"></ion-icon>
+          </button>
+        </td>
+        <td align="center">
+          <label>Otros Productos</label>
+        </td>
+        <td width="20px" align="right">
+          <button ion-button clear (click)="productos()">
+            <ion-icon name="md-book" class="icono"></ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </ion-navbar> 
+</ion-header>
+
+<ion-content padding>
+  <p id="etiqueta" *ngIf="Tipo == 'Enfermedad'">Para: {{nombre}}</p>
+  <p id="etiqueta" *ngIf="Tipo == 'Ingrediente'">Con: {{nombre}}</p>
+<ion-grid>
+  <ion-row>
+    <ion-col col-6 col-md-4 col-xl-3 *ngFor="let d of data">
+      <img src="{{d.img99x148}}" (click)= "detalle(d.ID)">
+      <p id="productoNombre">{{d.NOMBRE}}</p>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

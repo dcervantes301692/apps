@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar color="blue">
+    <table class="encabezado">
+      <tr>
+        <td width="20px" align="left">
+          <button ion-button menuToggle clear>
+            <ion-icon name="menu" class="icono"></ion-icon>
+          </button>
+        </td>
+        <td align="center">
+          <label>Perfil</label>
+        </td>
+        <td width="20px" align="right">
+          <button ion-button clear (click)="Pedido()">
+            <ion-icon name="md-cart" class="icono"></ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </ion-navbar> 
+</ion-header>
+
+<ion-content>
+  <div class="superiro">
+    <img src="assets/imgs/perfil2.png">
+    <div disabled>
+      <br>
+      <table *ngFor="let u of Usuario">
+        <tr>
+          <td width = "20%">
+              <img src="assets/imgs/photo.png" id="imgPerfil" (click)="capturar()">
+          </td>
+          <td class="nombre">
+              {{u.NOMBRE}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="codigo">
+            {{u.ID}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="puntos">
+            {{u.PUNTOS}}
+            <small>PTS</small>
+            <ion-icon name="md-star"></ion-icon>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <ion-content class="medio">
+    <div padding class="grafica">
+      <p>Próximo día de pedido:</p>
+      <label>{{proximoPedido}}</label>
+    </div>
+    <ion-slides>
+      <div *ngFor="let f of PromocionesFlayer">
+      <ion-slide>
+        <img src = "{{f.IMGFLAYER}}" class="IMGFlayer" imageViewer>
+      </ion-slide>
+    </div>
+    </ion-slides>
+    <div padding class="grafica">
+      <p>Desempeño por estación</p>
+      <canvas baseChart width="250px"
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [colors]="lineChartColors"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType">
+      </canvas>
+    </div>
+  </ion-content>
+</ion-content>

@@ -1,0 +1,31 @@
+page-informacion {
+    .encabezado{
+        width: 100%;
+        border: 1 solid black;
+    }
+    .encabezado label{
+        font-size: 150%;
+        color: #009999;
+        font-weight:bold;
+    }
+    .icono{
+        font-size: 25px;
+        color: #009999;
+    }
+    .informacion p{
+        font-weight:bold;
+        color: #009999;
+    }
+    .enfermedad{
+        width: 50%;
+    }
+    #productoNombre{
+        font-size: 50%;
+        color: black;
+    }
+    .btnInformativo{
+        font-size: 150%;
+        border: #009999 solid 2px;
+        padding-top: 6px;
+    }
+}

@@ -1,0 +1,87 @@
+<ion-header>
+    <ion-navbar color="blue">
+        <table class="encabezado">
+            <tr>
+                <td width="20px" align="left">
+                    <button ion-button clear (click)="catalogo()">
+                        <ion-icon name="md-arrow-back" class="icono"></ion-icon>
+                    </button>
+                </td>
+                <td align="center">
+                    <label>Producto</label>
+                </td>
+                <td width="20px" align="right">
+                    <button ion-button clear (click)="Pedido()">
+                        <ion-icon name="md-cart" class="icono"></ion-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </ion-navbar> 
+</ion-header>
+
+<ion-content>
+    <ion-header class="imgheader">
+        <div *ngFor="let d of detalleProducto" padding align="center">
+            <img class="fav" src="assets/imgs/vacio.png" (click)= "addFavorito()">
+            <img class="fav" *ngIf="favorito != ''" src="assets/imgs/lleno.png" (click)= "removeFavorito()">
+            <img src="{{d.img99x148}}" width="40%" imageViewer>
+        </div>
+    </ion-header>
+    <ion-content>
+        <div>
+            <div class="divInicial" *ngFor="let d of detalleProducto">
+                <table>
+                    <tr>
+                        <td class="nombre" colspan="5">{{d.NOMBRE}}</td>
+                    </tr>
+                    <tr>
+                        <td class="marca" colspan="5">{{d.LINEA}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="codigoProducto">COD: {{d.ID}}</td>
+                    </tr>
+                    <tr>
+                        <td class="moneda">$</td>
+                        <td class="costo">{{d.PRECIO}}</td>
+                        <td class="btnCompra">
+                            <ion-icon name="remove-circle" color = "red"
+                            (click)="removeCantidad()"></ion-icon>
+                        </td>
+                        <td class="cantidad">{{cantidad}}</td>
+                        <td class="btnCompra">
+                            <ion-icon name="add-circle" color = "green"
+                            (click)="addCantidad()"></ion-icon>
+                        </td>
+                    </tr>
+                </table>
+                <button ion-button full clear color = "blen" class="btnAddPedido" 
+                (click)="btnAgregarPedido(d.ID,d.PRECIO)">
+                    Agregar a pedido 
+                    <ion-icon name="md-cart" padding-left = "1px"></ion-icon>
+                </button> 
+            </div>
+            <div *ngFor="let d of detalleProducto">
+                <div class="descipcion">
+                    <p>DESCRIPCIÓN</p>
+                    {{d.DESCRIPCION}}
+                </div>
+            </div>
+            <br>
+            <div class="descipcion">
+                <p *ngIf="Ingredientes != ''">INGREDIENTES</p>
+                <ion-slides slidesPerView = "3">
+                    <div *ngFor="let i of Ingredientes">
+                        <ion-slide>
+                            <img src = "{{i.img99x148}}" (click)= "relacion(i.ID,i.NOMBRE)" class="Ingrediente">
+                            <p id="productoNombre">{{i.NOMBRE}}</p>
+                        </ion-slide>
+                    </div>
+                </ion-slides>
+            </div>
+        </div>
+        <div padding *ngIf="bandera == 1">
+            <button ion-button full clear color="blen" class="btnInformativo" (click)="openInformacion()">SABER MÁS</button>
+        </div>
+    </ion-content>
+</ion-content>

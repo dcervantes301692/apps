@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar color="blue">
+    <table class="encabezado">
+      <tr>
+        <td width="20px" align="left">
+          <button ion-button menuToggle clear>
+            <ion-icon name="menu" class="icono"></ion-icon>
+          </button>
+        </td>
+        <td align="center">
+          <label>{{nombreVentana}}</label>
+        </td>
+        <td width="20px" align="right">
+          <button ion-button clear (click)="Productos()">
+            <ion-icon name="md-bookmarks" class="icono"></ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </ion-navbar> 
+</ion-header>
+<ion-content>
+  <div *ngFor="let p of pedidos" padding>
+    <button class="btnPedido">
+      <table class="tablaPedidos" (click) = "detalle(p.idPedido)">
+        <tr class="titulo" width="45%">
+          <td align="left">{{p.idPedido}}</td>
+          <td class="color" width="30%">${{p.TOTAL}}</td>
+          <td width="25%" rowspan="2" align="center" class="status">
+            <ion-icon name="paper-plane"  *ngIf="p.STATUS == 1" class="gris"></ion-icon>
+            <ion-icon name="md-done-all" *ngIf="p.STATUS == 2" class="aceptado"></ion-icon>
+            <ion-icon name="md-bus" *ngIf="p.STATUS == 3" class="embarcado"></ion-icon>
+            <img src="assets/imgs/blen-mini.png" width="35%"  *ngIf="p.STATUS == 4">
+            <ion-icon name="md-close-circle" *ngIf="p.STATUS == 5" class="rechazado"></ion-icon>
+            <ion-icon name="md-warning" *ngIf="p.STATUS == 6" class="noEnviaado"></ion-icon>
+            <br>
+            <label *ngIf="p.STATUS == 1">Enviado</label>
+            <label *ngIf="p.STATUS == 2">Autorizado</label>
+            <label *ngIf="p.STATUS == 3">Embarcado</label>
+            <label *ngIf="p.STATUS == 4">Entregado</label>
+            <label *ngIf="p.STATUS == 5">Rechazado</label>
+            <label *ngIf="p.STATUS == 6">No Enviado</label>
+          </td>
+        </tr>
+        <tr>
+          <td align="left">{{p.ESTACION}}</td>
+          <td class="color">{{p.PIEZAS}}</td>
+        </tr>
+      </table>
+    </button>
+  </div>
+  <!-- <div class="bloqueo" id="bloqueo" disabled>
+    <img src="assets/imgs/loading.gif" disabled>
+  </div> -->
+</ion-content>

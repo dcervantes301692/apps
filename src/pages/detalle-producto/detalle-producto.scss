@@ -1,0 +1,93 @@
+page-detalle-producto {
+    .encabezado{
+        width: 100%;
+        border: 1 solid black;
+    }
+    .encabezado label{
+        font-size: 150%;
+        color: #009999;
+        font-weight:bold;
+    }
+    .icono{
+        font-size: 25px;
+        color: #009999;
+    }
+    .imgheader{
+        height: 50%;
+    }
+    .divInicial{
+        padding-top: 5%;
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-bottom: 0%;
+    }
+    table{
+        width: 100%;
+    }
+    .nombre{
+        font-size: 16px;
+        font-weight:bold;
+    }
+    .marca{
+        font-size: 15px;
+        font-style: italic;
+        color: #009999;
+    }
+    .moneda{
+        font-size: 20px;
+        color: #009999;
+        font-weight:bold;
+    }
+    .codigoProducto{
+        color: #CCCCCC;
+    }
+    .costo{
+        font-size: 30px;
+        font-weight:bold;
+    }
+    .cantidad{
+        width: 50px;
+        font-size: 20px;
+        text-align: center;
+    } 
+    .btnCompra{
+        width: 40px;
+        text-align: center;
+        font-size: 25px;
+    }
+    .fav{
+        position: absolute;
+        top: 5%;
+        right: 5%;
+        width: 30px;
+        z-index: 1;
+    }
+    .descipcion{
+        padding-top: 3%;
+        padding-left: 3%;
+        padding-right: 3%;
+        padding-bottom: 0%;
+    }
+    .descipcion p{
+        font-weight:bold;
+        color: #009999;
+        padding: 0%;
+    }
+    .Ingrediente{
+        width: 50%;
+    }
+    .btnInformativo{
+        font-size: 150%;
+        border: #009999 solid 2px;
+        padding-top: 6px;
+    }
+    .btnAddPedido{
+        background: #009999;
+        color: white;
+        font-size: x-large;
+    }
+    #productoNombre{
+        font-size: 50%;
+        color: black;
+    }  
+}

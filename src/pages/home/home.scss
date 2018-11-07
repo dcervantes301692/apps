@@ -1,0 +1,72 @@
+page-home {
+    .encabezado{
+        width: 100%;
+        border: 1 solid black;
+    }
+    .encabezado label{
+        font-size: 150%;
+        color: #009999;
+        font-weight:bold;
+    }
+    .icono{
+        font-size: 25px;
+        color: #009999;
+    }
+    .superiro{
+        height: 25%;
+    }
+    .superiro img{
+        width: 100%;
+        height: 100%;
+    }
+    .superiro div{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        position: absolute;
+        top: 0%;
+        color: white;
+        padding-top: 2px;
+        padding-left: 10px;
+    }
+    .nombre{
+        padding-left: 10px;
+        font-size: 160%;
+    }
+    .codigo{
+        padding-left: 79px;
+    }
+    .puntos{
+        font-size: 130%;
+        padding-left: 79px;
+        font-weight:bold;
+    }
+    .medio p{
+        font-size: 130%;
+        font-weight:bold;
+        color: #009999;
+        padding: 0%;
+        border: 0%;
+        margin: 0%;
+    }
+    .medio img{
+        padding: 0%;
+        border: 0%;
+        margin: 0%;
+    }
+    .grafica{
+        background: #CCFFFF,
+    } 
+    #imgPerfil{
+        width: 60px;
+        height: 60px;
+        border-radius:60px;
+        border: 2px solid white;
+    }
+    .normas{
+        background: red;
+        width: 100%;
+        height: 50%;
+        z-index: 100;
+    }
+}

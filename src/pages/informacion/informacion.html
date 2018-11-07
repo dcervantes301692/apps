@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-navbar color="blue">
+        <table class="encabezado">
+            <tr>
+                <td width="20px" align="left">
+                    <button ion-button clear (click)="detalle()">
+                        <ion-icon name="md-arrow-back" class="icono"></ion-icon>
+                    </button>
+                </td>
+                <td align="center">
+                    <label>Información</label>
+                </td>
+                <td width="20px" align="right">
+                    <button ion-button clear (click)="Pedido()">
+                        <ion-icon name="md-cart" class="icono"></ion-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </ion-navbar> 
+</ion-header>
+
+<ion-content padding>
+    <div class="informacion">
+        <p>MODO DE EMPLEO</p>
+        {{MODOUSO}}
+        <p *ngIf="Enfermedades != ''">PADECIMIENTOS</p>
+        <ion-slides slidesPerView = "3">
+            <div *ngFor="let e of Enfermedades">
+                <ion-slide>
+                    <img src = "{{e.img99x148}}" (click)= "relacion(e.ID,e.NOMBRE)" class="enfermedad">
+                    <p id="productoNombre">{{e.NOMBRE}}</p>
+                </ion-slide>
+            </div>
+        </ion-slides>
+        <p>CONTRAINDICACIÓN</p>
+        {{CONTRAINDICACIONES}}
+    </div>
+</ion-content>
+
+<ion-footer padding>
+    <button ion-button full clear color="blen" class="btnInformativo" 
+    (click)="detalle()">VOLVER</button>
+</ion-footer>

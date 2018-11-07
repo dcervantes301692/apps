@@ -1,0 +1,65 @@
+page-historial-pedido {
+    .encabezado{
+        width: 100%;
+        border: 1 solid black;
+    }
+    .encabezado label{
+        font-size: 150%;
+        color: #009999;
+        font-weight:bold;
+    }
+    .icono{
+        font-size: 25px;
+        color: #009999;
+    }
+    .btnPedido{
+        width: 100%;
+        background: white;
+        padding: 0%;
+        border: 0%;
+        margin: 0%;
+    }
+    .tablaPedidos{
+        width: 100%;
+    }
+    .titulo{
+        font-weight:bold;
+        font-size: 110%;
+    }
+    .color{
+        color: #009999;
+        text-align: right;
+    }
+    .status .gris, .status .noEnviaado, .status .embarcado{
+        color: #CCCCCC;
+        font-size: 200%; 
+    }
+    .status .aceptado{
+        font-size: 200%; 
+        color: #009999;
+    }
+    .status .rechazado{
+        font-size: 200%; 
+        color: red;
+    }
+    .status label{
+        font-size: 70%;
+        color: #CCCCCC;
+    }
+    .bloqueo{
+        width: 100%;
+        height: 100%;
+        //background-color: rgba(0,0,0,0.5);
+        position: absolute;
+        top: 0%;
+        z-index: 2;
+        display: none;
+    }
+    .bloqueo img{
+        width: 50%;
+        position: absolute;
+        top: 30%;
+        left: 25%;
+        z-index: 3;
+    }
+}

@@ -1,0 +1,31 @@
+<ion-menu [content]="content">
+  <ion-header >
+    <ion-navbar color="light">
+      <table class="encabezado">
+        <tr>
+          <td width="20px" align="left">
+            <button ion-button menuToggle>
+              <ion-icon name="menu" color="blen" class="icono"></ion-icon>
+            </button>
+          </td>
+          <td width="20px" align="right">
+            <button ion-button clear >
+              <ion-icon name="md-mail" color="blen" class="icono"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </ion-navbar>
+  </ion-header>
+    
+  <ion-content padding class="menu">
+    <img src="assets/imgs/blen-mini.png" width="10%">
+    <label>Menú</label>
+    <p menuClose *ngFor="let p of pages" (click)="openPage(p)">
+      <ion-icon name="radio-button-off" class="iconPunto"></ion-icon>
+      {{p.title}}
+    </p>
+    <ion-icon name="remove" class="visual"></ion-icon>
+  </ion-content>
+</ion-menu>
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

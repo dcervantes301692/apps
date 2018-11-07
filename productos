@@ -1,0 +1,144 @@
+import { Component, text } from '@angular/core';
+import { IonicPage, NavController, NavParams, List } from 'ionic-angular';
+import { WsappsProvider } from '../../providers/wsapps/wsapps';
+
+@IonicPage()
+@Component({
+  selector: 'page-productos',
+  templateUrl: 'productos.html',
+})
+export class ProductosPage {
+
+  lineas: any;
+  bdCatalogo: any;
+  arr = [];
+  arr2 = [];
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: WsappsProvider) {
+    this.getcatalogo();
+  }
+
+  getLineas(){
+    this.http.getLineas()
+    .subscribe(
+      linea => {
+        if (linea != ""){
+          this.lineas = linea;
+          //console.log(this.lineas);
+          this.getcatalogo();
+        }
+        else {
+          console.log("cargue denuevo");
+        }
+      },
+      err => {
+        console.error("Error : " + err);
+      }
+    )
+  }
+
+  getcatalogo(){
+    this.http.getCatalogo()
+    .subscribe(
+      Catalogo => {
+        if (Catalogo != ""){
+          this.bdCatalogo = Catalogo;
+          this.muestraCatalogo();
+        }
+      },
+      err => {
+        console.log("Error :" +  err);
+      }
+    )
+  }
+
+  borrado(){
+    var k = 0;
+    //Object.keys(this.catalogo).length
+    for (var j = 0; j < 1; j++){
+      let id = this.catalogo[j].id
+      let vista  = this.catalogo.filter(function(e,i){return e.id == id})[0];
+      
+      if (this.arr[k]  null ){
+        this.arr[k] =  vista.marca;
+        this.arr2[k] = vista
+      }
+      else if (this.arr[k] != vista.marca){
+        k++;
+        this.arr[k] = vista.marca;
+        this.arr2[k] = vista;
+      }
+      else if (this.arr[k] == vista.marca){
+        this.arr2[k] = this.arr2[k] + ',' + vista;
+      }
+    }
+
+    console.log(this.arr2);
+    /*var txt = "";
+    //this.arr.length
+    for (var i = 0; i < this.arr.length; i ++){
+      if (txt == ""){
+        txt = '{name:' + this.arr[i] + ', producto:' + this.arr2[i] + '}'
+        this.arr[i] = txt;
+        txt = "";
+      }
+    }
+
+    k = 0;
+    for (var x = 1; x < this.arr.length; x ++){
+      this.arr[k] = this.arr[k] + ',' + this.arr[x]; 
+    }
+
+    this.catalogo = this.arr[0];
+
+    console.log(this.catalogo);*/
+  }
+
+  muestraCatalogo(){
+    var linea, imprime;
+    for (var i = 0; i < Object.keys(this.bdCatalogo).length; i++){
+
+      if (linea != this.bdCatalogo[i].id_marca){
+        linea =  this.bdCatalogo[i].id_marca;
+        if (imprime == null){
+          imprime = "<p>" + this.bdCatalogo[i].marca + "</p>" +
+          "<div id = 'cont'>" +
+            "<ion-slides>" +
+              "<table>" +
+                "<tr>";
+        }
+        else {
+        imprime += 
+              "</tr>" +
+            "</table>" +
+          "<ion-slides>" +
+        "</div>"+
+        "<p>" + this.bdCatalogo[i].marca + "</p>" +
+        "<div id = 'cont'>" +
+          "<ion-slides>" +
+            "<table>" +
+              "<tr>";
+        }
+
+        if (i == Object.keys(this.bdCatalogo).length -1){
+          imprime += 
+              "</tr>" +
+            "</table>" +
+          "<ion-slides>" +
+        "</div>";
+        }
+      }
+
+      if (linea == this.bdCatalogo[i].id_marca){
+        //imprime += "<button id = \"btn\">" + this.bdCatalogo[i].id + "</button>";
+        imprime +=
+        "<td>" +
+          "<button id = 'btn'>" +
+            "<img src = '../assets/imgs/3015.png'>" +
+          "</button>" +
+        "</td>";
+      }
+    }
+    //console.log(imprime);
+    document.getElementById('catalogo').innerHTML = imprime;
+  }
+}

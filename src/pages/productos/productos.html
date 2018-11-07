@@ -1,0 +1,61 @@
+<ion-header>
+    <ion-navbar color="blue">
+      <table class="encabezado">
+        <tr>
+          <td width="20px" align="left">
+            <button ion-button menuToggle clear>
+              <ion-icon name="menu" class="icono"></ion-icon>
+            </button>
+          </td>
+          <td align="center">
+            <label>Productos</label>
+          </td>
+          <td width="20px" align="right">
+            <button ion-button clear (click)="Pedido()">
+              <ion-icon name="md-cart" class="icono"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </ion-navbar> 
+</ion-header>
+    
+<ion-content>
+    <div>
+        <p>Producto Nuevos</p>
+        <ion-slides slidesPerView = "3">
+            <div *ngFor="let pn of ProductoNuevo">
+                <ion-slide>
+                    <img src = "{{pn.img99x148}}" (click)= "detalle(pn.ID)" class="productoIMG">
+                    <p id="productoNombre">{{pn.NOMBRE}}</p>
+                </ion-slide>
+            </div>
+        </ion-slides>
+    </div>
+    <div *ngFor="let l of Lineas">
+        <p>{{l.LINEA}}</p>
+        <ion-slides slidesPerView = "3">
+            <div *ngFor="let p of Productos">
+                <div *ngIf="p.idLinea == l.idLinea">
+                    <ion-slide>
+                        <img src = "{{p.img99x148}}" (click)= "detalle(p.ID)" class="productoIMG">
+                        <p id="productoNombre">{{p.NOMBRE}}</p>
+                    </ion-slide>
+                </div>
+            </div>
+        </ion-slides>
+    </div>
+    <div>
+        <p>Tus 10 productos mas comprados</p>
+        <ion-slides slidesPerView = "3">
+            <div *ngFor="let t of ProductoTop">
+                <ion-slide>
+                    <img src = "{{t.img99x148}}" (click)= "detalle(t.ID)" class="productoIMG">
+                    <p id="productoNombre">{{t.NOMBRE}}</p>
+                </ion-slide>
+            </div>
+        </ion-slides>
+    </div>
+    <div id="ocultaCatalogo" disable></div>
+</ion-content>
+

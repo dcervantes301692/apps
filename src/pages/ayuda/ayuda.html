@@ -1,0 +1,69 @@
+<ion-header>
+    <ion-navbar color="blue">
+      <table class="encabezado">
+        <tr>
+          <td width="20px" align="left">
+            <button ion-button menuToggle clear>
+              <ion-icon name="menu" class="icono"></ion-icon>
+            </button>
+          </td>
+          <td align="center">
+            <label>Atención a Cliente</label>
+          </td>
+          <td width="20px" align="right"></td>
+        </tr>
+      </table>
+    </ion-navbar> 
+  </ion-header>
+
+
+<ion-content padding>
+  <div class="Categoria">
+    <label>Departamento:</label>
+    <select [(ngModel)]="selectDepto" (change)="SubCategoria()" >
+      <option *ngFor="let d of Dep">{{d.CATEGORIA}}</option>
+    </select>
+    <label>Tematica:</label>
+    <select [(ngModel)]="opcionSeleccionado">
+      <option *ngFor="let t of tematica">{{t.SUBCATEGORIA}}</option>
+    </select>
+    <br>
+    <br>
+    <table>
+      <tr>
+        <td><label>Titulo:</label></td>
+        <td align="right"><p id="contadorTitulo"></p></td>
+      </tr>
+    </table>
+    <textarea name="textarea" id="titulo" [(ngModel)]="titulo" maxlength="100"></textarea>
+    <br>
+    <table>
+      <tr>
+        <td><label>Mensaje:</label></td>
+        <td align="right"><p id="contador"></p></td>
+      </tr>
+    </table>
+    <textarea name="textarea" id="mensaje" [(ngModel)]="mensaje" maxlength="500"></textarea>
+  </div>
+</ion-content>
+<ion-footer padding>
+  <table>
+    <tr>
+      <td colspan="3" align="center">
+        <button ion-fab clear class="btnCamara">
+          <ion-icon name="md-camera"></ion-icon>
+        </button>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td width= "40%">
+        <button ion-button full clear class="btnchat" (click)= "limpiar()">BORRAR</button>
+      </td>
+      <td width="10%"></td>
+      <td width ="40%">
+        <button ion-button full clear  class="btnchat" (click)="Solicitud()">ENVIAR</button>
+      </td>
+    </tr>
+  </table>
+</ion-footer>

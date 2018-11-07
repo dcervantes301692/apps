@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar color="blue">
+    <table class="encabezado">
+      <tr>
+        <td width="20px" align="left">
+          <button ion-button menuToggle clear>
+            <ion-icon name="menu" class="icono"></ion-icon>
+          </button>
+        </td>
+        <td align="center">
+          <label>Favoritos</label>
+        </td>
+        <td width="20px" align="right">
+          <button ion-button clear (click)="Pedido()">
+            <ion-icon name="md-cart" class="icono"></ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </ion-navbar> 
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 col-md-4 col-xl-3 *ngFor="let f of favoritos">
+        <img src="{{f.img99x148}}" (click)= "detalle(f.ID)">
+        <p id="productoNombre">{{f.NOMBRE}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

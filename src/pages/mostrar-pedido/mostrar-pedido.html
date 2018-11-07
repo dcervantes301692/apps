@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-navbar color="blue">
+    <table class="encabezado">
+      <tr>
+        <td width="20px" align="left">
+          <button ion-button menuToggle clear>
+            <ion-icon name="menu" class="icono"></ion-icon>
+          </button>
+        </td>
+        <td align="center">
+          <label>{{alias}}</label>
+        </td>
+        <td width="20px" align="right">
+          <button ion-button clear (click)="Pedido()">
+            <ion-icon name="md-cart" class="icono"></ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </ion-navbar> 
+</ion-header>
+
+<ion-content>
+  <div>
+      <ion-list *ngFor="let p of pedidoActual">
+        <ion-item-sliding *ngIf="p.idLinea != 89">
+          <ion-item>
+            <table>
+              <tr>
+                <td rowspan="3" class="imgPedido">
+                  <img src="{{p.img99x148}}">
+                </td>
+                <td colspan="7" class="nombre">{{p.NOMBRE}}</td>
+                <td rowspan="3" class="moneda">$</td>
+                <td rowspan="3" class="precio">{{p.PRECIO}}</td>
+              </tr>
+              <tr>
+                <td colspan="5" class="linea">{{p.LINEA}}</td>
+              </tr>
+              <tr>
+                <td class="codPedido">{{p.idProducto}}</td>
+                <td class="cantidadPedido">Cantidad</td>
+                <td class="botonespedido"> </td>
+                <td class="numCantidadPedido">{{p.CANTIDAD}}</td>
+                <td class="botonespedido"></td>
+              </tr>
+            </table>
+          </ion-item>
+          <ion-item-options side="rigth">
+            <button ion-button color="green" (click) = "add(p.idProducto,p.CANTIDAD,p.PRECIO)">
+              <ion-icon name="md-add-circle"></ion-icon>
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+  </div>
+  <div>
+    <ion-list *ngFor="let p of pedidoActual">
+      <ion-item-sliding *ngIf="p.idLinea == 89">
+        <ion-item id="kit">
+          <table>
+            <tr>
+              <td rowspan="3" class="imgPedido">
+                <img src="{{p.img99x148}}">
+              </td>
+              <td colspan="7" class="nombre">{{p.NOMBRE}}</td>
+              <td rowspan="3" class="moneda">$</td>
+              <td rowspan="3" class="precio">{{p.PRECIO}}</td>
+            </tr>
+            <tr>
+              <td colspan="5" class="linea">{{p.LINEA}}</td>
+            </tr>
+            <tr>
+              <td class="codPedido">{{p.idProducto}}</td>
+              <td class="cantidadPedido">Cantidad</td>
+              <td class="botonespedido"></td>
+              <td class="numCantidadPedido">{{p.CANTIDAD}}</td>
+              <td class="botonespedido"></td>
+            </tr>
+          </table>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div padding>
+    <table class="operaciones">
+      <tr>
+        <td class="TituloTicket">Total:</td>
+        <td class="SimboloTicket" width="5%">$</td>
+        <td class="TituloCosto" width="25%">{{TotalVenta}}</td>
+      </tr>
+      <tr>
+        <td class="SubtiruloTicket">Comisionable:</td>
+        <td class="SubtiruloTicketCosto" width="5%">$</td>
+        <td class="SubtiruloTicketCosto"  width="25%">{{Comisionable}}</td>
+      </tr>
+      <tr>
+        <td class="SubtiruloTicket">No Comisionable:</td>
+        <td class="SubtiruloTicketCosto" width="5%">$</td>
+        <td class="SubtiruloTicketCosto"  width="25%">{{NoComisionable}}</td>
+      </tr>
+      <tr>
+        <td class="TituloTicket">Pago Ticket:</td>
+        <td class="SimboloTicket" width="5%">$</td>
+        <td class="TituloCosto"  width="25%">{{Pago}}</td>
+      </tr>
+      <tr>
+        <td class="SubtiruloTicket">Tu Ganancia:</td>
+        <td class="SubtiruloTicketCosto" width="5%">$</td>
+        <td class="SubtiruloTicketCosto"  width="25%">{{Ganacia}}</td>
+      </tr>
+    </table>
+    <button ion-button full clear (click)="duplicar()" id="habil">Duplicar Pedido</button>
+  </div>
+</ion-footer>

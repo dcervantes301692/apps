@@ -1,0 +1,38 @@
+<ion-content>
+  <div style="width: 100%; height: 100%;">
+    <img src="assets/imgs/portada.png" width="100%" height="100%" (click) = "desarrollador()">
+    <div style="height: 30%; width: 100%; position: absolute; bottom: 15%;" padding = "20%">
+      <table width="100%">
+        <tr>
+          <td colspan="2">
+            <input style="width: 100%; 
+            height: 50px; 
+            text-align: center;
+            font-size: 30px;
+            border-radius: 10px;
+            border: 0;" type="number" [(ngModel)]="user" (click)="DatosVigencia()"></td>
+        </tr>
+        <br>
+        <tr>
+          <td colspan="2">
+            <input style="width: 100%; 
+            height: 50px; 
+            text-align: center;
+            font-size: 30px;
+            border-radius: 10px;
+            border: 0;" type="password" [(ngModel)]="pass"></td>
+        </tr>
+        <br>
+        <tr>
+          <td>
+            <button ion-button full style="height: 50px; 
+            font-size: 30px;
+            border-radius: 10px;
+            border: 0;" 
+            color = "blen" (click)="submit()">Entrar</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ion-content>
