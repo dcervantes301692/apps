@@ -96,5 +96,6 @@
         <variable name="CAMERA_USAGE_DESCRIPTION" value="the app need the camera" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="the app need the photolibrary" />
     </plugin>
+    <plugin name="com-sarriaroman-photoviewer" spec="1.1.18" />
     <engine name="ios" spec="4.5.5" />
 </widget>

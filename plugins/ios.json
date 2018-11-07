@@ -39,6 +39,9 @@
     },
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "mx.blen.catalogo1"
+    },
+    "com-sarriaroman-photoviewer": {
+      "PACKAGE_NAME": "mx.blen.catalogo1"
     }
   },
   "dependent_plugins": {

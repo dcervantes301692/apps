@@ -9,6 +9,8 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { PedidoPage } from '../pages/pedido/pedido';
 import { ProductosPage} from '../pages/productos/productos';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { CondicionesPage } from '../pages/condiciones/condiciones';
  
 @Component({
   templateUrl: 'app.html'
@@ -17,7 +19,7 @@ import { ProductosPage} from '../pages/productos/productos';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any;
 
   pages: Array<{title: string, component: any}>;
   datos: any = [];
@@ -25,7 +27,9 @@ export class MyApp {
 
   constructor(public platform: Platform,
     public statusBar: StatusBar, 
-    public splashScreen: SplashScreen,) {
+    public splashScreen: SplashScreen,
+    private sqlite: SQLite) {
+      this.vigencia();
 
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -39,11 +43,33 @@ export class MyApp {
       { title: 'Favoritos', component: FavoritosPage },
       { title: 'Pedido', component: PedidoPage },
       { title: 'Mis Pedidos', component: HistorialPedidoPage },
-      { title: 'Ayuda', component: AyudaPage }
+      { title: 'Atención a Cliente', component: AyudaPage },
     ];
   }
-
   openPage(page) {
     this.nav.setRoot( page.component );
+  }
+
+  vigencia(){
+    this.rootPage = LoginPage;
+   this.sqlite.create({
+      name: 'dbBlenApp.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+      let sqlFecha = "SELECT  Date(julianday(VIGENCIAESTACION)+1) vigencia, ";
+      sqlFecha += "Date(julianday('now')) hoy ";
+      sqlFecha += "FROM Usuario";
+      db.executeSql(sqlFecha,{})
+      .then(res => {
+        if (res.rows.item(0).hoy != res.rows.item(0).vigencia){
+          this.rootPage = HomePage;
+        }
+        else{
+          this.rootPage = LoginPage;
+        }
+      }).catch(e => { console.log(e);
+        this.rootPage = LoginPage;
+      });
+    }).catch(e => { console.log(e); });
   }
 }

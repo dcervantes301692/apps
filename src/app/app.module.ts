@@ -9,9 +9,11 @@ import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import { Camera } from '@ionic-native/camera';
 import { MyApp } from './app.component';
+import { IonicImageViewerModule } from 'ionic-img-viewer';
 
 //pantallas
 import { AyudaPage } from '../pages/ayuda/ayuda';
+import { CondicionesPage } from '../pages/condiciones/condiciones';
 import { ComunicadosPage } from '../pages/comunicados/comunicados';
 import { DetalleProductoPage } from '../pages/detalle-producto/detalle-producto';
 import { FavoritosPage } from '../pages/favoritos/favoritos';
@@ -30,6 +32,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   declarations: [
     MyApp,
     AyudaPage,
+    CondicionesPage,
     ComunicadosPage,
     DetalleProductoPage,
     FavoritosPage,
@@ -46,12 +49,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     BrowserModule,
     ChartsModule,
     IonicModule.forRoot(MyApp),
-    HttpClientModule
+    HttpClientModule,
+    IonicImageViewerModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     AyudaPage,
+    CondicionesPage,
     ComunicadosPage,
     DetalleProductoPage,
     FavoritosPage,
