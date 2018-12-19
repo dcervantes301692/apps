@@ -5,9 +5,11 @@ import { ChartsModule } from 'ng2-charts';
 import { HttpClientModule } from '@angular/common/http';
 import { SqlProvider } from '../providers/sql/sql';
 import { WsappsProvider } from '../providers/wsapps/wsapps';
+import { DesarrolloProvider } from '../providers/desarrollo/desarrollo';
 import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import { Camera } from '@ionic-native/camera';
+import { Network } from '@ionic-native/network';
 import { MyApp } from './app.component';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 
@@ -73,14 +75,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     StatusBar,
     SplashScreen,
     Camera,
+    Network,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     WsappsProvider,
     SQLite,
     Toast,
     SqlProvider,
-    SqlProvider,
-    SqlProvider,
-    SqlProvider,
+    DesarrolloProvider,
+    DesarrolloProvider,
   ]
 })
 export class AppModule {}

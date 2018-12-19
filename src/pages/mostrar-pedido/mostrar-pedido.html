@@ -23,7 +23,7 @@
 <ion-content>
   <div>
       <ion-list *ngFor="let p of pedidoActual">
-        <ion-item-sliding *ngIf="p.idLinea != 89">
+        <ion-item-sliding *ngIf="p.VISIBLE != 0">
           <ion-item>
             <table>
               <tr>
@@ -56,7 +56,7 @@
   </div>
   <div>
     <ion-list *ngFor="let p of pedidoActual">
-      <ion-item-sliding *ngIf="p.idLinea == 89">
+      <ion-item-sliding *ngIf="p.VISIBLE == 0">
         <ion-item id="kit">
           <table>
             <tr>

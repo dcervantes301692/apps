@@ -1,24 +1,3 @@
-<!-- <ion-header>
-  <ion-navbar color="blue">
-    <table class="encabezado">
-      <tr>
-        <td width="20px" align="left">
-          <button ion-button menuToggle clear>
-            <ion-icon name="menu" class="icono"></ion-icon>
-          </button>
-        </td>
-        <td align="center">
-          <label>{{nombreVentana}}</label>
-        </td>
-        <td width="20px" align="right">
-          <button ion-button clear (click)="Productos()">
-            <ion-icon name="md-bookmarks" class="icono"></ion-icon>
-          </button>
-        </td>
-      </tr>
-    </table>
-  </ion-navbar> 
-</ion-header> -->
 <ion-content padding class="encabezado">
   <label>Términos y Condiciones</label>
     <p>
@@ -58,15 +37,4 @@
       <ion-checkbox [(ngModel)]="valida" (ionChange)="aceptar()" color="blen"></ion-checkbox>
     </ion-item>
   </ion-list>
-  <div *ngFor="let p of pedido">
-    <div>
-      {{p.NOMBRE}}
-      <br>
-      {{p.ESTACION}}
-      <br>
-      {{p.ANIO}}
-      <br>
-      {{p.STATUS}}
-    </div>
-  </div>
 </ion-content>

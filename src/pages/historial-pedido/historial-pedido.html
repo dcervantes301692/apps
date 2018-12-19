@@ -49,7 +49,9 @@
       </table>
     </button>
   </div>
-  <!-- <div class="bloqueo" id="bloqueo" disabled>
-    <img src="assets/imgs/loading.gif" disabled>
-  </div> -->
+  <div *ngFor="let p of pedidos" padding>
+    <div>
+      <p>{{p.ID}}</p>
+    </div>
+  </div>
 </ion-content>

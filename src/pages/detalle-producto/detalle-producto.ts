@@ -21,6 +21,8 @@ export class DetalleProductoPage {
   cantidad =  1;
   idProducto;
   bandera = 0;
+  alias;
+  anio;
   
   constructor(
     public navCtrl: NavController,
@@ -32,14 +34,14 @@ export class DetalleProductoPage {
       this.idProducto = navParams.get('idProducto');
   }
   ionViewDidLoad(){
+    let f = new Date();
+    this.anio=f.getFullYear();
     this.SelectProducto();
     this.favorito = this.detalleProducto[0].FAVORITO;
   }
 
   ionViewDidEnter(){
     let loading = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: '<img src="assets/imgs/loading.gif" disabled>'
     });
     loading.present();
     setTimeout(() => {
@@ -74,7 +76,34 @@ export class DetalleProductoPage {
   }
   ///AGREGA PRODUCTO A PEDIDO ACTUAL
   btnAgregarPedido(id,precio){
-    this.db.addPedido(id,this.cantidad,precio);
+    this.sqlite.create({
+      name: 'dbBlenApp.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+      let pedido = 'SELECT P.idPedido ';
+      pedido += 'FROM Pedido_Detalle P ';
+      pedido += 'WHERE P.idPedido =? ';
+      pedido += 'GROUP BY P.idPedido';
+      db.executeSql(pedido,[this.alias])
+      .then(res => {
+        console.log(res);
+        let sms = "No puedes agregar el producto, tienes un pedido en proceso ";
+        sms += "dentro de la estación";
+        let alert = this.alertCtrl.create({
+          subTitle: sms,
+          buttons: ['Aceptar']
+        });
+        alert.present();
+      }).catch(e => {console.log(e);
+          this.db.addPedido(id,this.cantidad,precio,0,0);
+        setTimeout(() => {
+          this.db.borrarPromo();
+        }, 100);
+        setTimeout(() => {
+          this.db.buscarPromo();
+        }, 300);
+      });
+    }).catch(e => { console.log(e); });
   }
   //FUNCION PARA CAMBIAR DE VENTANA A I PEDIDO VIGENTE
   Pedido(){
@@ -86,6 +115,11 @@ export class DetalleProductoPage {
       name: 'dbBlenApp.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
+      db.executeSql('SELECT ID, E1 FROM Usuario', {})
+        .then(res => {
+          this.alias = 'APP'+res.rows.item(0).ID+res.rows.item(0).E1+this.anio;
+        }).catch(e => console.log(e));
+
       let sql = "SELECT ID,NOMBRE,LINEA,PRECIO,DESCRIPCION,MODOUSO,CONTRAINDICACIONES,";
       sql += "img99x148 FROM Producto WHERE ID =?";
       db.executeSql(sql,[this.idProducto])

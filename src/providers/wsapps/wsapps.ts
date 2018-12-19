@@ -83,4 +83,9 @@ export class WsappsProvider {
     detalle += "/" + tipo;
     return this.http.get(detalle)
   }
+
+  Promos(){
+    let promo = this.urlServidor + "ProductoPromociones";
+    return this.http.get(promo)
+  }
 }

@@ -25,8 +25,6 @@ export class ProductosPage {
     
   ionViewDidLoad(){
     let loading = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: '<img src="assets/imgs/loading.gif" disabled>'
     });
   
     setTimeout(() => {

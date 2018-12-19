@@ -8,6 +8,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import { SqlProvider } from '../../providers/sql/sql';
+import { LoginPage } from '../login/login';
+import { DesarrolloProvider } from '../../providers/desarrollo/desarrollo';
 
 @Component({
   selector: 'page-home',
@@ -25,9 +27,9 @@ export class HomePage {
   venta_total;
   estacion = 0;
   proximoPedido;
-  //ventas = [1,2,3,4];
-
+  bandera= 0;
   base64Image: string;
+  banderad = 0;
 
 
 
@@ -45,6 +47,7 @@ export class HomePage {
     public navParams: NavParams, 
     public http: WsappsProvider,
     public db: SqlProvider,
+    public d: DesarrolloProvider,
     public menu: MenuController,
     public alertCtrl: AlertController,
     private sqlite: SQLite,
@@ -184,5 +187,20 @@ export class HomePage {
         }
       }).catch(e => { console.log(e); });      
     }).catch(e => { console.log(e); });
+  }
+  Elimina(){
+    this.bandera++;
+    if(this.bandera == 60){
+      this.sqlite.deleteDatabase({ name: 'dbBlenApp.db',
+      location: 'default'});
+      this.navCtrl.setRoot( LoginPage );
+    }
+  }
+  desarrollador(){
+    this.banderad ++;
+    if (this.banderad == 50){
+      this.banderad = 0;
+      this.d.ocultar();
+    }
   }
 }

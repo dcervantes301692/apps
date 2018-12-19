@@ -18,8 +18,8 @@ export class MostrarPedidoPage {
   TotalVenta = "0.00";
   Ganacia = "0.00";
   Pago = "0.00";
-  usuario;
-  estacion;
+  pedidoEstacion;
+  anio;
   constructor(public navCtrl: NavController,
     public db: SqlProvider,
     public navParams: NavParams,
@@ -29,6 +29,8 @@ export class MostrarPedidoPage {
   }
 
   ionViewDidLoad() {
+    let f = new Date();
+    this.anio=f.getFullYear();
     this.SelectPedidoBuscado();
   }
   SelectPedidoBuscado(){
@@ -36,7 +38,12 @@ export class MostrarPedidoPage {
       name: 'dbBlenApp.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      let pedido = 'SELECT P.idProducto, ';
+      db.executeSql('SELECT ID, E1 FROM Usuario', {})
+        .then(res => {
+          this.pedidoEstacion = 'APP'+res.rows.item(0).ID+res.rows.item(0).E1+this.anio;
+        }).catch(e => console.log(e));
+
+      let pedido = 'SELECT P.idProducto, C.VISIBLE, ';
       pedido += 'CASE WHEN length(C.NOMBRE) > 20 THEN substr(C.NOMBRE, 1,20) || "..." ELSE C.NOMBRE END NOMBRE, '
       pedido += 'C.idLinea, C.LINEA, C.COMISIONABLE, C.img99x148, P.CANTIDAD, ';
       pedido += '(P.PRECIO*P.CANTIDAD) PRECIO ';
@@ -48,6 +55,7 @@ export class MostrarPedidoPage {
         for(var i=0; i<res.rows.length; i++){
           this.pedidoActual.push({
             idProducto:res.rows.item(i).idProducto,
+            VISIBLE:res.rows.item(i).VISIBLE,
             NOMBRE:res.rows.item(i).NOMBRE,
             idLinea:res.rows.item(i).idLinea,
             LINEA:res.rows.item(i).LINEA,
@@ -83,37 +91,83 @@ export class MostrarPedidoPage {
   }
   add(id,cantidad,precio){
     let neto = precio/cantidad;
-    this.db.addPedido(id,1,neto);
+    this.sqlite.create({
+      name: 'dbBlenApp.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+      let pedido = 'SELECT P.idPedido ';
+      pedido += 'FROM Pedido_Detalle P ';
+      pedido += 'WHERE P.idPedido =? ';
+      pedido += 'GROUP BY P.idPedido';
+      db.executeSql(pedido,[this.alias])
+      .then(res => {
+        console.log(res);
+        let sms = "No puedes agregar el producto, tienes un pedido en proceso ";
+        sms += "dentro de la estación";
+        let alert = this.alertCtrl.create({
+          subTitle: sms,
+          buttons: ['Aceptar']
+        });
+        alert.present();
+      }).catch(e => {console.log(e);
+          this.db.addPedido(id,1,neto,0,0);
+        setTimeout(() => {
+          this.db.borrarPromo();
+        }, 100);
+        setTimeout(() => {
+          this.db.buscarPromo();
+        }, 300);
+      });
+    }).catch(e => { console.log(e); });
   }
   duplicar(){
     this.sqlite.create({
       name: 'dbBlenApp.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      let pedido = 'SELECT P.idProducto, P.CANTIDAD, P.PRECIO ';
+      let pedido = 'SELECT P.idPedido ';
       pedido += 'FROM Pedido_Detalle P ';
-      pedido += 'WHERE P.idPedido =?';
+      pedido += 'WHERE P.idPedido =? ';
+      pedido += 'GROUP BY P.idPedido';
       db.executeSql(pedido,[this.alias])
       .then(res => {
-        this.duplicado = [];
-        for(var i=0; i<res.rows.length; i++){
-          this.db.duplicarPedido(
-            res.rows.item(i).idProducto,
-            res.rows.item(i).CANTIDAD,
-            res.rows.item(i).PRECIO
-          );
-        }
-      }).catch(e => console.log(e));
+        console.log(res);
+        let sms = "No puedes duplicar el pedido, tienes un pedido en proceso ";
+        sms += "dentro de la estación";
+        let alert = this.alertCtrl.create({
+          subTitle: sms,
+          buttons: ['Aceptar']
+        });
+        alert.present();
+      }).catch(e => {console.log(e);
+         for (var i = 0; i < this.pedidoActual.length; i++){
+          if (this.pedidoActual[i].VISIBLE == 1){
+            this.db.addPedido(
+            this.pedidoActual[i].idProducto,
+            this.pedidoActual[i].CANTIDAD,
+            this.pedidoActual[i].PRECIO,
+            0,0);
+          }
+          if (i == (this.pedidoActual.length-1)){
+            let alert = this.alertCtrl.create({
+              subTitle: 'Tu pedido fue duplicado con éxito',
+            });
+            alert.present(); 
+            setTimeout(() => {
+              alert.dismiss();
+              this.navCtrl.setRoot( PedidoPage );
+            }, 1500);
+          }
+         }
+        setTimeout(() => {
+          this.db.borrarPromo();
+        }, 200);
+        setTimeout(() => {
+          this.db.buscarPromo();
+        }, 400);
+      });
     }).catch(e => { console.log(e); });
-
-    let alert = this.alertCtrl.create({
-      subTitle: 'Tu pedido fue duplicado con éxito',
-    });
-    alert.present(); 
-    setTimeout(() => {
-      alert.dismiss();
-      this.navCtrl.setRoot( PedidoPage );
-    }, 1500);
+    
   }
   Pedido(){
     this.navCtrl.setRoot( PedidoPage );

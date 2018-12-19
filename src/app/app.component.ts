@@ -10,7 +10,6 @@ import { LoginPage } from '../pages/login/login';
 import { PedidoPage } from '../pages/pedido/pedido';
 import { ProductosPage} from '../pages/productos/productos';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { CondicionesPage } from '../pages/condiciones/condiciones';
  
 @Component({
   templateUrl: 'app.html'

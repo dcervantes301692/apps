@@ -87,7 +87,7 @@
   </div>
   <div>
     <ion-list *ngFor="let p of pedidoActual">
-      <ion-item-sliding *ngIf="p.idLinea != 89">
+      <ion-item-sliding *ngIf="p.VISIBLE == 1">
         <ion-item>
           <table>
             <tr>
@@ -152,6 +152,41 @@
                   <ion-icon name="add-circle" 
                   (click)="addkit(p.idProducto,p.CANTIDAD)" color = "green"></ion-icon>
               </td>
+            </tr>
+          </table>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+  <div>
+    <ion-list *ngFor="let p of pedidoActual">
+      <ion-item-sliding *ngIf="p.idLinea == 96">
+        <ion-item id="Promo">
+          <table>
+            <tr>
+              <td rowspan="3" class="imgPedido">
+                <img src="{{p.img99x148}}">
+              </td>
+              <td colspan="7" class="nombre">{{p.NOMBRE}}</td>
+              <td rowspan="2" class="moneda">$</td>
+              <td rowspan="2" class="precio">{{p.PRECIO}}</td>
+            </tr>
+            <tr>
+              <td colspan="5" class="linea">{{p.LINEA}}</td>
+            </tr>
+            <tr>
+              <td>Pedidas</td>
+              <td class="botonespedido">
+                  <ion-icon name="remove-circle" 
+                  (click)="removekit(p.idProducto,p.CANTIDAD)"  color = "red"></ion-icon>
+              </td>
+              <td>{{p.CANTIDAD}}</td>
+              <td class="botonespedido">
+                  <ion-icon name="add-circle" 
+                  (click)="addPrmo(p.idProducto,p.CANTIDAD,p.OTORGA)" color = "green"></ion-icon>
+              </td>
+              <td>Disponible</td>
+              <td align="center">{{p.OTORGA}}</td>
             </tr>
           </table>
         </ion-item>

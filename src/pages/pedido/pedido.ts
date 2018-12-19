@@ -5,6 +5,7 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import * as $ from "jquery";
 import { HistorialPedidoPage } from '../historial-pedido/historial-pedido';
 import { CondicionesPage } from '../condiciones/condiciones';
+import { Lexer } from '@angular/compiler';
 
 @IonicPage()
 @Component({
@@ -13,6 +14,7 @@ import { CondicionesPage } from '../condiciones/condiciones';
 })
 export class PedidoPage {
   pedidoActual: any = [];
+  promoAplicadas: any = [];
   Comisionable = "0.00";
   NoComisionable = "0.00";
   TotalVenta = "0.00";
@@ -23,8 +25,8 @@ export class PedidoPage {
   cantidadBuscador;
   minimoVenta;
   codigoKit;
-  banderakit = 0;
-
+  alias;
+  anio;
 
   constructor(public navCtrl: NavController,
     private sqlite: SQLite,
@@ -43,6 +45,8 @@ export class PedidoPage {
     //EVENTO LOAD CONSULTA PARA LA VENTANA
     ionViewDidLoad(){
       this.SelectPedidoActual();
+      let f = new Date();
+      this.anio=f.getFullYear();
     }
     //PEDIDO ACTUAL
     SelectPedidoActual(){
@@ -50,11 +54,12 @@ export class PedidoPage {
         name: 'dbBlenApp.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
-        db.executeSql('SELECT CODIGOKIT, MINIMO_VENTA FROM Usuario', {})
-          .then(res => {
-            this.codigoKit = res.rows.item(0).CODIGOKIT;
-            this.minimoVenta = res.rows.item(0).MINIMO_VENTA;
-          }).catch(e => console.log(e));
+        db.executeSql('SELECT CODIGOKIT, MINIMO_VENTA, ID, E1 FROM Usuario', {})
+        .then(res => {
+          this.codigoKit = res.rows.item(0).CODIGOKIT;
+          this.minimoVenta = res.rows.item(0).MINIMO_VENTA;
+          this.alias = 'APP'+res.rows.item(0).ID+res.rows.item(0).E1+this.anio;
+        }).catch(e => console.log(e));
 
         let Totales = 'SELECT SUM(P.PRECIO*P.CANTIDAD) TOTAL, ';
         Totales += 'SUM(CASE WHEN C.COMISIONABLE = 1 THEN (P.PRECIO*P.CANTIDAD) ELSE 0 END) COMI, ';
@@ -87,55 +92,40 @@ export class PedidoPage {
     }
     //MODIFICA EL PEDIDO ACTUAL
     removeProducto(idProducto, cantidad){
-      if (cantidad > 1){
-        var newCant = parseInt(cantidad)-1;
-        this.sqlite.create({
-          name: 'dbBlenApp.db',
-          location: 'default'
-        }).then((db: SQLiteObject) => {
-          let sql = "UPDATE Pedido_Detalle SET CANTIDAD=? ";
-          sql += "WHERE idPedido = 0 AND idProducto=?";
-          db.executeSql(sql,[newCant,idProducto])
-            .then(res => { console.log(res); })
-            .catch(e => { console.log(e); });
-        }).catch(e => { console.log(e); });
-        this.SelectPedidoActual();
-      }
-    }
-    addProducto(idProducto, cantidad){
-      var newCant = parseInt(cantidad)+1;
-      if (newCant == 10){
-        let alert = this.alertCtrl.create({
-          title: '',
-          subTitle: 'Favor de verificar la cantidad',
-          buttons: ['Aceptar']
-        });
-        alert.present();
-      }
-        this.sqlite.create({
-          name: 'dbBlenApp.db',
-          location: 'default'
-        }).then((db: SQLiteObject) => {
-          let sql = "UPDATE Pedido_Detalle SET CANTIDAD=? ";
-          sql += "WHERE idPedido = 0 AND idProducto=?";
-          db.executeSql(sql,[newCant,idProducto])
-            .then(res => { console.log(res); })
-            .catch(e => { console.log(e); });
-        }).catch(e => { console.log(e); });
-        this.SelectPedidoActual();
-    }
-    deleteProducto(id){
-      this.sqlite.create({
-        name: 'dbBlenApp.db',
-        location: 'default'
-      }).then((db: SQLiteObject) => {
-        db.executeSql('DELETE FROM Pedido_Detalle WHERE idPedido = 0 AND idProducto=?',[id])
-        .then(res => { console.log(res); }).catch(e => { console.log(e); });
-      }).catch(e => { console.log(e); });
-
+      this.db.DecrementarCantidad(idProducto, cantidad);
+      setTimeout(() => {
+        this.db.borrarPromo();
+      }, 200);
+      setTimeout(() => {
+        this.db.buscarPromo();
+      }, 400);
       setTimeout(() => {
         this.SelectPedidoActual();
-      }, 1000);
+      }, 600);
+    }
+    addProducto(idProducto, cantidad){
+      this.db.IncrementarCantidad(idProducto, cantidad);
+      setTimeout(() => {
+        this.db.borrarPromo();
+      }, 200);
+      setTimeout(() => {
+        this.db.buscarPromo();
+      }, 400);
+      setTimeout(() => {
+        this.SelectPedidoActual();
+      }, 600);
+    }
+    deleteProducto(id){
+      this.db.Eliminarproducto(id);
+      setTimeout(() => {
+        this.db.borrarPromo();
+      }, 200);
+      setTimeout(() => {
+        this.db.buscarPromo();
+      }, 400);
+      setTimeout(() => {
+        this.SelectPedidoActual();
+      }, 600);
     }
     //BUSCAR PRODUCTO CATALOGO
     btnBuscar(){
@@ -146,7 +136,7 @@ export class PedidoPage {
       }).then((db: SQLiteObject) => {
         let sql = 'SELECT C.ID, C.LINEA, C.PRECIO, C.img99x148, ';
         sql += 'CASE WHEN length(C.NOMBRE) > 20 THEN substr(C.NOMBRE, 1,20) || "..." ELSE C.NOMBRE END NOMBRE '
-        sql += 'FROM Producto C WHERE ID=? AND C.idLinea NOT IN (89)';
+        sql += 'FROM Producto C WHERE ID=? AND C.VISIBLE = 1';
           db.executeSql(sql,[this.BuscarP])
           .then(res => {
             this.ProductoBusqueda = [];
@@ -178,11 +168,12 @@ export class PedidoPage {
       this.cantidadBuscador = this.cantidadBuscador + 1;
       if (this.cantidadBuscador == 10){
         let alert = this.alertCtrl.create({
-          title: '',
           subTitle: 'Favor de verificar la cantidad',
-          buttons: ['Aceptar']
         });
-        alert.present();
+        alert.present(); 
+        setTimeout(() => {
+          alert.dismiss();
+        }, 1000);
       }
     }    
     btnCancelar(){
@@ -194,14 +185,40 @@ export class PedidoPage {
       this.BuscarP ="";
     }
     btnAgregar(id,precio){
-      this.db.addPedido(id,this.cantidadBuscador,precio);
-      document.getElementById("tablaBusqueda").style.display = "none";
-      document.getElementById("habil").style.display = "block";
-      document.getElementById("inhabil").style.display = "none";
-      this.ProductoBusqueda = [];
-      setTimeout(() => {
-         this.SelectPedidoActual();
-      }, 1000);
+       this.sqlite.create({
+        name: 'dbBlenApp.db',
+        location: 'default'
+      }).then((db: SQLiteObject) => {
+        let pedido = 'SELECT P.idPedido ';
+        pedido += 'FROM Pedido_Detalle P ';
+        pedido += 'WHERE P.idPedido =? ';
+        pedido += 'GROUP BY P.idPedido';
+        db.executeSql(pedido,[this.alias])
+        .then(res => {console.log(res);
+          let sms = "No puedes agregar el producto, tienes un pedido en proceso ";
+        sms += "dentro de la estación";
+        let alert = this.alertCtrl.create({
+          subTitle: sms,
+          buttons: ['Aceptar']
+        });
+        alert.present();
+        }).catch(e => {console.log(e);
+            this.db.addPedido(id,this.cantidadBuscador,precio,0,0);
+          document.getElementById("tablaBusqueda").style.display = "none";
+          document.getElementById("habil").style.display = "block";
+          document.getElementById("inhabil").style.display = "none";
+          this.ProductoBusqueda = [];
+          setTimeout(() => {
+            this.db.borrarPromo();
+          }, 100);
+          setTimeout(() => {
+            this.db.buscarPromo();
+          }, 300);
+          setTimeout(() => {
+            this.SelectPedidoActual();
+          }, 500);
+        });
+      }).catch(e => { console.log(e); });
     }
     ocultar(){
       this.BuscarP ="";
@@ -216,8 +233,7 @@ export class PedidoPage {
         let sql = "SELECT ID,PRECIO FROM Producto WHERE ID=?";
         db.executeSql(sql,[this.codigoKit])
         .then(res => {
-          this.banderakit = 1;
-          this.db.addPedido(res.rows.item(0).ID,1,res.rows.item(0).PRECIO);
+          this.db.duplicarPedido(res.rows.item(0).ID,1,res.rows.item(0).PRECIO);
           setTimeout(() => {
             this.totalesKit();
           }, 1000);
@@ -229,9 +245,9 @@ export class PedidoPage {
         name: 'dbBlenApp.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
-        let pedido = 'SELECT P.idProducto, ';
+        let pedido = 'SELECT P.idProducto, P.OTORGA, ';
         pedido += 'CASE WHEN length(C.NOMBRE) > 20 THEN substr(C.NOMBRE, 1,20) || "..." ELSE C.NOMBRE END NOMBRE, '
-        pedido += 'C.idLinea, C.LINEA, C.img99x148, P.CANTIDAD, ';
+        pedido += 'C.idLinea, C.LINEA, C.img99x148, P.CANTIDAD, C.VISIBLE, ';
         pedido += '(P.PRECIO*P.CANTIDAD) PRECIO ';
         pedido += 'FROM Pedido_Detalle P INNER JOIN Producto C ON C.ID = P.idProducto ';
         pedido += 'WHERE P.STATUS = 0';
@@ -241,11 +257,13 @@ export class PedidoPage {
           for(var i=0; i<res.rows.length; i++){
             this.pedidoActual.push({
               idProducto:res.rows.item(i).idProducto,
+              OTORGA:res.rows.item(i).OTORGA,
               NOMBRE:res.rows.item(i).NOMBRE,
               idLinea:res.rows.item(i).idLinea,
               LINEA:res.rows.item(i).LINEA,
               img99x148:res.rows.item(i).img99x148,
               CANTIDAD:res.rows.item(i).CANTIDAD,
+              VISIBLE:res.rows.item(i).VISIBLE,
               PRECIO:res.rows.item(i).PRECIO.toFixed(2)
             })
           }
@@ -313,9 +331,9 @@ export class PedidoPage {
         db.executeSql('DELETE FROM Pedido_Detalle WHERE idPedido=0 AND STATUS=0 AND idProducto=?',[id])
         .then(res => { console.log(res); }).catch(e => { console.log(e); });
 
-        let pedido = 'SELECT P.idProducto, ';
+        let pedido = 'SELECT P.idProducto, P.OTORGA, ';
         pedido += 'CASE WHEN length(C.NOMBRE) > 20 THEN substr(C.NOMBRE, 1,20) || "..." ELSE C.NOMBRE END NOMBRE, '
-        pedido += 'C.idLinea, C.LINEA, C.img99x148, P.CANTIDAD, ';
+        pedido += 'C.idLinea, C.LINEA, C.img99x148, P.CANTIDAD, C.VISIBLE, ';
         pedido += '(P.PRECIO*P.CANTIDAD) PRECIO ';
         pedido += 'FROM Pedido_Detalle P INNER JOIN Producto C ON C.ID = P.idProducto ';
         pedido += 'WHERE P.STATUS = 0';
@@ -325,15 +343,17 @@ export class PedidoPage {
           for(var i=0; i<res.rows.length; i++){
             this.pedidoActual.push({
               idProducto:res.rows.item(i).idProducto,
+              OTORGA:res.rows.item(i).OTORGA,
               NOMBRE:res.rows.item(i).NOMBRE,
               idLinea:res.rows.item(i).idLinea,
               LINEA:res.rows.item(i).LINEA,
               img99x148:res.rows.item(i).img99x148,
               CANTIDAD:res.rows.item(i).CANTIDAD,
+              VISIBLE:res.rows.item(i).VISIBLE,
               PRECIO:res.rows.item(i).PRECIO.toFixed(2)
-            })
+            });
           }
-        }).catch(e => console.log(e))
+        }).catch(e => console.log(e));
 
         let Totales = 'SELECT SUM(P.PRECIO*P.CANTIDAD) TOTAL, ';
         Totales += 'SUM(CASE WHEN C.COMISIONABLE = 1 THEN (P.PRECIO*P.CANTIDAD) ELSE 0 END) COMI, ';
@@ -404,7 +424,20 @@ export class PedidoPage {
       alert.present(); 
     }
     terminos(){
-      let terminosModal = this.modalCtrl.create( CondicionesPage);
-      terminosModal.present();
+      this.navCtrl.setRoot( CondicionesPage );
+    }
+    //////////////////////////////
+    //PRMOCIONES
+    removePromo(idProducto, cantidad){
+      this.db.DecrementarPromo(idProducto, cantidad);
+      setTimeout(() => {
+        this.SelectPedidoActual();
+      }, 600);
+    }
+    addPrmo(idProducto, cantidad, disponible){
+      this.db.IncrementaPromo(idProducto, cantidad,disponible);
+      setTimeout(() => {
+        this.SelectPedidoActual();
+      }, 600);
     }
 }

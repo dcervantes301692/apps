@@ -17,7 +17,6 @@ export class HistorialPedidoPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private sqlite: SQLite,
-    private toast: Toast,
     public loadingCtrl: LoadingController){
   }
 
@@ -37,7 +36,6 @@ export class HistorialPedidoPage {
   ionViewDidLoad() {
     this.SelectPedidos();
   }
-
   SelectPedidos(){
     this.sqlite.create({
       name: 'dbBlenApp.db',
@@ -61,10 +59,25 @@ export class HistorialPedidoPage {
           })
         }
       }).catch(e => console.log(e));
+
+      let sqlja = "SELECT * ";
+      sql += "FROM ProductoPromociones";
+      db.executeSql(sqlja,[])
+      .then(res => {
+        this.pedidos = [];
+        for(var i=0; i<res.rows.length; i++){
+          this.pedidos.push({
+            ID:res.rows.item(i).ID,
+            MINIMO_PIEZAS: res.rows.item(i).MINIMO_PIEZAS,
+            EXCEPCION_CODIGO:res.rows.item(i).EXCEPCION_CODIGO,
+            LINEAS:res.rows.item(i).LINEAS,
+            MINIMO_COMPRA:res.rows.item(i).MINIMO_COMPRA,
+            MULTIPLE:res.rows.item(i).MULTIPLE,
+            CODIGOS:res.rows.item(i).CODIGOS
+          })
+        }
+      }).catch(e => console.log(e));
     }).catch(e => { console.log(e); });
-  }
-  ver(referencia){
-  this.navCtrl.setRoot( MostrarPedidoPage, { alias: referencia } );
   }
   detalle(pedido){
     this.navCtrl.setRoot( MostrarPedidoPage, { alias: pedido} );

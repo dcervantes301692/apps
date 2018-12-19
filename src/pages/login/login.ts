@@ -2,11 +2,11 @@ import { Component} from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
 import { AlertController } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { Toast } from '@ionic-native/toast';
 import { SqlProvider } from '../../providers/sql/sql';
 import { WsappsProvider } from '../../providers/wsapps/wsapps';
+import { DesarrolloProvider } from '../../providers/desarrollo/desarrollo';
 
 @Component({
  templateUrl: 'login.html',
@@ -25,6 +25,7 @@ export class LoginPage {
   enfermedad;
   productoEnfermedad;
   casos;
+  prmociones;
 
   constructor(
     public navCtrl: NavController,
@@ -32,9 +33,10 @@ export class LoginPage {
     private ws: WsappsProvider,
     public alertCtrl: AlertController,
     public menu: MenuController,
-    private sqlite: SQLite,
-    private toast: Toast,
-    public loadingCtrl: LoadingController) { this.menu.enable(false); }
+    public loadingCtrl: LoadingController,
+    private network: Network,
+    private d: DesarrolloProvider) { 
+      this.menu.enable(false); }
 
 
   ionViewDidLoad(){
@@ -44,47 +46,60 @@ export class LoginPage {
   submit(){
     if (this.user != "" && this.pass !=""){
       this.ws.getLogin(this.user,this.pass).subscribe(login => {
-        if (login[0].status == 1){
-          this.ws.getProductoTop(login[0].id).subscribe( Top => {
-            this.db.IngresaData(login, this.vigenciaCatalogo, this.producto, 
-              this.flayer, this.ingrediente, this.productoIngrediente, 
-              Top, this.enfermedad, this.productoEnfermedad, this.casos);
-          let loading = this.loadingCtrl.create({
-            content: 'Descargando Complementos...'
+        if (login == null){
+          let alert = this.alertCtrl.create({
+            subTitle: 'Información incorrecta intena nuevamente',
           });
-        
-          loading.present();
-        
+          alert.present(); 
           setTimeout(() => {
-            loading.dismiss();
-            this.navCtrl.setRoot( HomePage );
-          }, 60000);
-          });
+            alert.dismiss();
+          }, 2000);     
         }
         else{
-          let alert = this.alertCtrl.create({
-            title: '',
-            subTitle: 'Cominicate con tu DMI',
-            buttons: ['Aceptar']
-          });
-          alert.present();
+          if (login[0].status == 1){
+            this.ws.getProductoTop(login[0].id).subscribe( Top => {
+              this.db.IngresaData(login, this.vigenciaCatalogo, this.producto, 
+                this.flayer, this.ingrediente, this.productoIngrediente, 
+                Top, this.enfermedad, this.productoEnfermedad, this.casos, this.prmociones);
+            let loading = this.loadingCtrl.create({
+              content: 'Descargando Complementos...'
+            });
+          
+            loading.present();
+          
+            setTimeout(() => {
+              loading.dismiss();
+              this.navCtrl.setRoot( HomePage );
+            }, 60000);
+            });
+          }
+          else{
+            let alert = this.alertCtrl.create({
+              subTitle: 'Cominicate con tu DMI',
+            });
+            alert.present(); 
+            setTimeout(() => {
+              alert.dismiss();
+            }, 2000);
+          }
         }
       });
     }
     else {
       let alert = this.alertCtrl.create({
-        title: 'Error 028',
-        subTitle: 'Ingresa Datos',
-        buttons: ['Aceptar']
+        subTitle: 'Completa los datos',
       });
-      alert.present();
-    } 
+      alert.present(); 
+      setTimeout(() => {
+        alert.dismiss();
+      }, 2000);
+    }
   }
 
   wsApp(){
     this.ws.getVigenciaCatalogo().subscribe( VigenviaCatalogo => {
       this.vigenciaCatalogo = VigenviaCatalogo;
-    });
+    });    
 
     this.ws.getProducto().subscribe( Producto => {
       this.producto = Producto;
@@ -113,6 +128,10 @@ export class LoginPage {
     this.ws.CasosApoyo().subscribe( Casos => {
       this.casos = Casos;
     })
+
+    this.ws.Promos().subscribe( promo => {
+      this.prmociones = promo
+    })
   }
 
   ionViewWillLeave(){
@@ -121,9 +140,9 @@ export class LoginPage {
 
   desarrollador(){
     this.bandera ++;
-    if (this.bandera == 20){
-      alert("Diego Osvaldo Cervantes Guzman");
+    if (this.bandera == 50){
       this.bandera = 0;
+      this.d.ocultar();
     }
   }
 }
